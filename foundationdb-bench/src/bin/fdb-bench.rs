@@ -204,8 +204,9 @@ fn main() {
 
     network.wait();
 
-    let cluster_path = fdb::default_config_path();
-    let cluster = Cluster::new(cluster_path)
+    let cluster_path = std::env::var("FDB_CLUSTER_FILE")
+        .unwrap_or_else(|_| String::from(fdb::default_config_path()));
+    let cluster = Cluster::new(cluster_path.as_str())
         .wait()
         .expect("failed to create cluster");
 
